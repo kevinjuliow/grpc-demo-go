@@ -1,2 +1,30 @@
 syntax="proto3";
 option go_package = "./proto" ; 
+
+
+service GreetService {
+  rpc Greet (NoParams) returns (GreetResponse);
+  rpc GreetServerStream (NameLists) returns (stream GreetResponse); 
+  rpc GreetClientStream (stream GreetRequest) returns (MessagesList); 
+  rpc GreetBiDirectionalStream (stream GreetRequest) returns (stream GreetResponse); 
+}
+
+
+message NoParams {} 
+
+message GreetRequest { 
+  string name = 1 ; 
+}
+
+message GreetResponse{ 
+  string message =  1 ;  
+}
+
+
+message NameLists { 
+  repeated string names = 1;
+}
+
+message MessagesList {
+  repeated string messages = 1;
+}
