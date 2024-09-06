@@ -13,18 +13,18 @@ service GreetService {
 message NoParams {} 
 
 message GreetRequest { 
-  string name = 1 ; 
+  string Name = 1 ; 
 }
 
 message GreetResponse{ 
-  string message =  1 ;  
+  string Message =  1 ;  
 }
 
 
 message NameLists { 
-  repeated string names = 1;
+  repeated string Names = 1;
 }
 
 message MessagesList {
-  repeated string messages = 1;
+  repeated string Messages = 1;
 }
