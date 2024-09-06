@@ -20,13 +20,15 @@ This is a simple demonstration of gRPC in Golang. The project includes a server 
 - run the server
   ```bash
   go run *.go
+  ```
 
 - change to client directory
  ```bash
   cd client
-```
+  ```
 - run the server
   ```bash
   go run *.go
+  ```
 
 
