@@ -30,7 +30,8 @@ func main() {
 		Names: []string{"Kevin", "Julio", "Walter"},
 	}
 
-	callGreetServerStream(client, names)
-
 	// callGreet(client)
+	// callGreetServerStream(client, names)
+	callGreetClientStream(client, names)
+
 }

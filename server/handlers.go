@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"io"
 	"log"
 	"time"
 
@@ -27,5 +28,22 @@ func (h *GreetServer) GreetServerStream(req *pb.NameLists, stream pb.GreetServic
 		}
 		time.Sleep(1 * time.Second)
 	}
+	return nil
+}
+
+func (h *GreetServer) GreetClientStream(stream pb.GreetService_GreetClientStreamServer) error {
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
+
+		log.Printf("Got request with name : %v", req.Name)
+
+	}
+
 	return nil
 }
