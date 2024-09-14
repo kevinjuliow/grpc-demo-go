@@ -49,6 +49,8 @@ func callGreetServerStream(client pb.GreetServiceClient, names *pb.NameLists) {
 func callGreetClientStream(client pb.GreetServiceClient, names *pb.NameLists) {
 	log.Printf("Client Stream started")
 
+	var messages []string
+
 	stream, err := client.GreetClientStream(context.Background())
 	if err != nil {
 		log.Fatalf("Failed while Client Stream %v", err)
@@ -59,10 +61,15 @@ func callGreetClientStream(client pb.GreetServiceClient, names *pb.NameLists) {
 			log.Fatalf("Failed while sending %v", err)
 		}
 		log.Printf("Sent Request with name %v", name)
+		messages = append(messages, name)
 		time.Sleep(1 * time.Second)
 	}
 
 	resp, errClose := stream.CloseAndRecv()
+	if errClose == io.EOF {
+		log.Println(messages)
+		log.Fatal("Client Stream Finished")
+	}
 	if errClose != nil {
 		log.Fatalf("Error While Receiving %v", err)
 	}

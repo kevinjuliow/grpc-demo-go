@@ -47,3 +47,20 @@ func (h *GreetServer) GreetClientStream(stream pb.GreetService_GreetClientStream
 
 	return nil
 }
+
+func (h *GreetServer) GreetBiDirectionalStream(stream pb.GreetService_GreetBiDirectionalStreamServer) error {
+	for {
+		req, err := stream.Recv()
+
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatalf("Fail when receiving %v", err)
+		}
+
+		log.Printf("Got Request with name : %v", req.Name)
+	}
+
+	return nil
+}
