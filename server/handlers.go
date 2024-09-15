@@ -53,14 +53,20 @@ func (h *GreetServer) GreetBiDirectionalStream(stream pb.GreetService_GreetBiDir
 		req, err := stream.Recv()
 
 		if err == io.EOF {
-			break
+			return nil
 		}
 		if err != nil {
-			log.Fatalf("Fail when receiving %v", err)
+			return err
 		}
 
 		log.Printf("Got Request with name : %v", req.Name)
-	}
 
-	return nil
+		res := &pb.GreetResponse{
+			Message: "Hello " + req.Name,
+		}
+
+		if err := stream.Send(res); err != nil {
+			return err
+		}
+	}
 }

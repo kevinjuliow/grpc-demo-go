@@ -76,3 +76,42 @@ func callGreetClientStream(client pb.GreetServiceClient, names *pb.NameLists) {
 
 	log.Println(resp)
 }
+
+func callBiDirectionalStream(client pb.GreetServiceClient, names *pb.NameLists) {
+
+	log.Println("BiDirectional Stream Started ")
+	stream, err := client.GreetBiDirectionalStream(context.Background())
+	if err != nil {
+		log.Fatal("Could not send names")
+	}
+	channel := make(chan struct{})
+
+	go func() {
+		for {
+			messages, err := stream.Recv()
+
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				log.Fatalf("Error while Receiving %v", err)
+			}
+			log.Println(messages)
+		}
+		close(channel)
+	}()
+
+	for _, name := range names.Names {
+		req := &pb.GreetRequest{
+			Name: name,
+		}
+		if err := stream.Send(req); err != nil {
+			log.Fatalf("Error while sending %v", err)
+		}
+		time.Sleep(1 * time.Second)
+	}
+
+	stream.CloseSend()
+	<-channel
+	log.Printf("BiDirectional Stream ended.")
+}
